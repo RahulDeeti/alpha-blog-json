@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+    include JSONAPI::ActsAsResourceController
+    protect_from_forgery with: :null_session
     helper_method :current_user, :logged_in?
 
     def current_user

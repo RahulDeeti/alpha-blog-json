@@ -7,14 +7,15 @@ Rails.application.routes.draw do
   post 'login', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy'
 
-  resources :articles #, only: [:show, :index, :new, :create, :edit, :update, :destroy]
-  get 'signup', to: 'users#new'
-  #post 'users', to: 'users#create' 
-  resources :users, except: [:new]
-  get 'login', to: 'sessions#new'
-  post 'login', to: 'sessions#create'
-  delete 'logout', to: 'sessions#destroy' 
+  # resources :articles #, only: [:show, :index, :new, :create, :edit, :update, :destroy]
+  # ##post 'users', to: 'users#create' 
+  # resources :users
 
-  resources :categories, except: [:destroy]
+  # resources :categories, except: [:destroy]
+
+  jsonapi_resources :articles
+  jsonapi_resources :article_categories
+  jsonapi_resources :users
+  jsonapi_resources :categories
   
 end
