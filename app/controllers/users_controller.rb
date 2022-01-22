@@ -34,7 +34,7 @@ class UsersController < ApplicationController
     # def create
     #     @user = User.new(user_params)
     #     if @user.save
-    #         session[:user_id] = @user.id
+    #         session[:id] = @user.id
     #         flash[:notice] = "welcome to Alpha blog, sign up sccessful"
     #         redirect_to articles_path
     #     else
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
     #     if current_user.admin? 
     #         flash[:notice] = "Account and all asociated articles successfully deleted"
     #     else
-    #         session[:user_id] = nil
+    #         session[:id] = nil
     #     end
     #     redirect_to articles_path
     # end
@@ -68,4 +68,16 @@ class UsersController < ApplicationController
     #         redirect_to @user
     #     end
     # end
+    # before_action :authorize_user
+    # before_action :current_user
+    def destroy
+        @user = User.find(params[:id])
+        # binding.pry
+        authorize current_user
+        if @user.destroy 
+            render :json => {message: "deleted user"}
+        else
+            render :json => {message: "you don't have previliges to delete the user"}
+        end
+    end
 end

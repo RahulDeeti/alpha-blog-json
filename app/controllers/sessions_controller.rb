@@ -1,26 +1,37 @@
 class SessionsController < ApplicationController
+    attr_accessor :user
     def new
 
     end
 
     def create
-        byebug
-        user = User.find_by(email: params[:email].downcase)
-        if user && user.authenticate(params[:password])
-            session[:user_id] = user.id
+        # binding.pry
+        @user = User.find_by(email: params[:email].downcase)
+        p @user
+        if @user && @user.authenticate(params[:password])
+            # binding.pry
+            session[:id] = @user.id
+            cookies[:id] = @user.id
+            p 'login test success'
             flash[:notice] = "Logged in successfully"
-            # redirect_to user
-            render :json => user
+            render :json => {message: "logged in successfully"}
         else
             flash.now[:alert] = "There was something wrong with your login credentials"
             render :json => {message: "There was something wrong with your credentials"}
         end
+        # binding.pry
     end
 
     def destroy
-        session[:user_id] = nil
-        flash[:notice] = "Logged out"
         # redirect_to root_path
-        render :json => {message: "logged out successfully"}
+        # binding.pry
+        if !!session[:id]
+            flash[:notice] = "Logged out"
+            session[:id] = nil
+            render :json => {message: "logged out successfully"}
+      
+        else
+            render :json => {message: "you are not a logged in user"}
+        end
     end
 end

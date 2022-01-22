@@ -69,4 +69,14 @@ class ArticlesController < ApplicationController
     #             redirect_to @article
     #         end
     #     end
+    def destroy
+        @article = Article.find(params[:id])
+        # binding.pry
+        authorize current_user
+        if @article.destroy 
+            render :json => {message: "deleted article"}
+        else
+            render :json => {message: "you don't have previliges to delete the article"}
+        end
+    end
 end
